@@ -1,13 +1,13 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Wikimedia
+namespace Registrar
 {
     public class RouteConfig
     {
         public static string DefaultAction()
         {
-            return "/Medias/List";
+            return "/Students/List";
         }
 
         public static void RegisterRoutes(RouteCollection routes)

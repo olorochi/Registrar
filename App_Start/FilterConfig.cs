@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Wikimedia
+namespace Registrar
 {
     public class FilterConfig
     {

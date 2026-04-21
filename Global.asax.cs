@@ -11,7 +11,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace Wikimedia
+namespace Registrar
 {
     public class MvcApplication : System.Web.HttpApplication
     {
@@ -51,25 +51,9 @@ namespace Wikimedia
             {
                 if (@event.User == null) DB.RenewPasswordCommands.Delete(@event.Id);
             }
-            foreach (var like in DB.Likes.ToList().Copy())
-            {
-                if (like.User == null || like.Media == null) DB.Likes.Delete(like.Id);
-            }
-            foreach (var like in DB.Commentlikes.ToList().Copy())
-            {
-                if (like.User == null || like.Comment == null) DB.Likes.Delete(like.Id);
-            }
-            foreach (Models.Comment comment in DB.Comments.ToList().Copy())
-            {
-                if (comment.Owner == null || comment.Media == null) DB.RenewPasswordCommands.Delete(comment.Id);
-            }
             foreach (var notification in DB.Notifications.ToList().Copy())
             {
                 if (notification.User == null || notification.User == null) DB.Notifications.Delete(notification.Id);
-            }
-            foreach (Models.Media media in DB.Medias.ToList().Copy())
-            {
-                if (media.Owner == null) DB.RenewPasswordCommands.Delete(media.Id);
             }
         }
         /*

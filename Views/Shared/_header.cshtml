@@ -10,22 +10,6 @@
     int currentMediaId = Session["CurrentMediaId"] != null ? (int)Session["CurrentMediaId"] : 0;
     string currentMediaTitle = Session["currentMediaTitle"] != null ? (string)Session["currentMediaTitle"] : "";
     string selectedCategory = Session["CurrentSelectedCategory"] != null ? (string)Session["CurrentSelectedCategory"] : "";
-    var mediaSortBy = Session["MediaSortBy"] != null ? (Models.MediaSortBy)Session["MediaSortBy"] : MediaSortBy.PublishDate;
-    bool SearchAscending = Session["SortAscending"] != null ? (bool)Session["SortAscending"] : false;
-
-    string checkSortByTitle = mediaSortBy == MediaSortBy.Title ? "fa-check" : "";
-    string checkSortByDate = mediaSortBy == MediaSortBy.PublishDate ? "fa-check" : "";
-    string checkSortByLikes = mediaSortBy == MediaSortBy.Likes ? "fa-check" : "";
-    string checkSortByComments = mediaSortBy == MediaSortBy.Comments ? "fa-check" : "";
-    string iconSortBy = "";
-    string iconSortByTitle = "";
-    switch (mediaSortBy)
-    {
-        case MediaSortBy.Title: iconSortBy = "fa-solid fa-t"; iconSortByTitle = "Tri des vidéos par titre"; break;
-        case MediaSortBy.PublishDate: iconSortBy = "fa-regular fa-calendar"; iconSortByTitle = "Tri des vidéos par date de publication"; break;
-        case MediaSortBy.Likes: iconSortBy = "fa-regular fa-thumbs-up"; iconSortByTitle = "Tri des vidéos par nombre de j'aime"; break;
-        case MediaSortBy.Comments: iconSortBy = "fa-regular fa-comment"; iconSortByTitle = "Tri des vidéos par nombre de commentaires"; break;
-    }
 
     var Categories = (List<string>)Session["Categories"];
 
@@ -60,17 +44,6 @@
                     @if (userCanWrite)
                     {
                         <a href="/@controller/Create" class="cmdIcon fa fa-circle-plus" title="Ajouter..."></a>
-                    }
-
-                    <a href="/@controller/ToggleMediaSort" class="cmdIcon @iconSortBy" title="@iconSortByTitle"></a>
-
-                    @if (SearchAscending)
-                    {
-                        <a href="/@controller/ToggleSort" class="cmdIcon fa fa-arrow-down-short-wide" title="Tri ascendant..."></a>
-                    }
-                    else
-                    {
-                        <a href="/@controller/ToggleSort" class="cmdIcon fa fa-arrow-up-wide-short" title="Tri descendant..."></a>
                     }
 
                     <a href="/@controller/ToggleSearch" class="cmdIcon fa fa-search" title="Recherche..."></a>
@@ -114,26 +87,6 @@
                                     </a>
                                 </div>
                             }
-
-                            <div class="dropdown-divider"></div>
-
-
-                            <div class="dropdown-item item-layout">
-                                <i class="menuIcon fa @checkSortByDate"></i>
-                                <a href="/Medias/SetMediaSortBy?mediaSortBy=@MediaSortBy.PublishDate">Trier par date</a>
-                            </div>
-                            <div class="dropdown-item item-layout">
-                                <i class="menuIcon fa @checkSortByTitle"></i>
-                                <a href="/Medias/SetMediaSortBy?mediaSortBy=@MediaSortBy.Title">Trier par titre</a>
-                            </div>
-                            <div class="dropdown-item item-layout">
-                                <i class="menuIcon fa @checkSortByLikes"></i>
-                                <a href="/Medias/SetMediaSortBy?mediaSortBy=@MediaSortBy.Likes">Trier par j'aimes</a>
-                            </div>
-                            <div class="dropdown-item item-layout">
-                                <i class="menuIcon fa @checkSortByComments"></i>
-                                <a href="/Medias/SetMediaSortBy?mediaSortBy=@MediaSortBy.Comments">Trier par commentaires</a>
-                            </div>
 
                             <div class="dropdown-divider"></div>
 

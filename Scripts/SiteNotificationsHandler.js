@@ -17,7 +17,7 @@
                 success: notification => {
                     if (notification != null) {
                         var icon = "/WebApp.png";
-                        var title = "Wikimedia";
+                        var title = "Registrar";
                         var message = notification.Message;
                         var avatar = notification.Avatar;
                         if (permission === "granted")
