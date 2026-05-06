@@ -1,28 +1,32 @@
-﻿<!--
-    Cette vue partielle a pour mission de construire l'entête et les menus en fonction de l'action
--->
+﻿@using Registar.Controllers;
 @{
     string controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower();
     string action = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString().ToLower();
 
-    bool search = Session["Search"] != null ? (bool)Session["Search"] : false;
-    string searchString = Session["SearchString"] != null ? (string)Session["SearchString"] : "";
-    int currentMediaId = Session["CurrentMediaId"] != null ? (int)Session["CurrentMediaId"] : 0;
-    string currentMediaTitle = Session["currentMediaTitle"] != null ? (string)Session["currentMediaTitle"] : "";
-    string selectedCategory = Session["CurrentSelectedCategory"] != null ? (string)Session["CurrentSelectedCategory"] : "";
-
-    var Categories = (List<string>)Session["Categories"];
+    var session = Session["session"] == null ? new Session() : (Session)Session["session"];
+    var locals = session.GetLocals(controller);
 
     bool userConnected = Models.User.ConnectedUser != null;
     bool userIsAdmin = userConnected ? Models.User.ConnectedUser.IsAdmin : false;
     bool userCanWrite = userConnected ? Models.User.ConnectedUser.CanWrite : false;
     string index = RouteConfig.DefaultAction();
+
+    var tabs = new string[] { "Étudiants", "Cours", "Profs" };
+    var tabsControllers = new string[] { "students", "courses", "teachers" };
 }
 
 <div class="section roundedBorder">
     <div class="headerMenu">
         <i class="siteIcon"></i>
-        <div class="pageTitle"> @ViewBag.PageTitle </div>
+        <div class="pageTitle">
+            @if (tabsControllers.Contains(controller))
+            {
+                for (int i = 0; i < tabs.Length; ++i)
+                {
+                    <a href="/@tabsControllers[i]/List" class="@(tabsControllers[i] == controller ? "tabActive" : "tabInactive")"> @tabs[i] </a>
+                }
+            }
+        </div>
         <!-- Direct action context command icons -->
         @switch (action)
         {
@@ -108,7 +112,7 @@
                         <a href="/@controller/Edit" class="cmdIcon fa fa-pen-to-square" title="Modifier..."></a>
                         <i class="cmdIcon fa fa-trash-can"
                            title="Effacer"
-                           onclick="bootbox.confirm(`<b style=color:red>Effacer le Media : </b><h3>@currentMediaTitle?</h3>`, function(result){ if (result) window.location = '/@controller/Delete'; })">
+                           onclick="bootbox.confirm(`<b style=color:red>Effacer ?</b>`, function(result){ if (result) window.location = '/@controller/Delete'; })">
                         </i>
                     }
 
@@ -127,7 +131,7 @@
             case "edit":
                 <div id="mainMenuPanel" class="menu">
                     <i class="cmdIcon submitCmd fa fa-circle-check" title="Soumettre" onclick="document.getElementById('submit').click()"></i>
-                    <a href="/@controller/Details/@currentMediaId" class="cmdIcon fa fa-square-xmark" title="Annuler"></a>
+                    <a href="/@controller/Details/@locals.CurrentId" class="cmdIcon fa fa-square-xmark" title="Annuler"></a>
                 </div>
                 break;
             case "loginsjournal":
@@ -142,21 +146,21 @@
 
     </div>
 </div>
-@if (search && controller=="medias" && action == "list")
+@if (action == "list" && locals.Search)
 {
     <div class="searchBar">
-        <input type="search" id="searchInput" class="section roundedBorder searchBarItem" value="@searchString" placeholder="Recherche...">
+        <input type="search" id="searchInput" class="section roundedBorder searchBarItem" value="@locals.SearchString" placeholder="Recherche...">
         <div id="categorySelectPanel" class="searchBarItem">
             <!-- Dynamically refreshed -->
             @{
-                Html.RenderPartial("GetMediasCategoriesList");
+                //Html.RenderPartial("GetMediasCategoriesList");
             }
 
         </div>
         <div id="ownerSelectPanel" class="searchBarItem">
             <!-- Dynamically refreshed -->
             @{
-                Html.RenderPartial("GetMediasOwnersList");
+                //Html.RenderPartial("GetMediasOwnersList");
             }
         </div>
     </div>

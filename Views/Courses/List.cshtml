@@ -1,6 +1,22 @@
-﻿@{ ViewBag.PageTitle = "Registrar"; }
-
-<div id="MediaListPanel" class="mediaListLayout">
+﻿<div id="CourseListPanel" class="CourseListLayout">
     <!-- Periodicaly refreshed -->
 </div>
 
+@section Scripts {
+    <script>
+
+        let courseListARP = null;
+
+        $(() => {
+            newSession(600);
+            courseListARP =
+                new AutoRefreshedPanel(
+                    "CourseListPanel",
+                    "/Courses/GetCourses",
+                    5,
+                    courseListPostRefresh);
+
+            function courseListPostRefresh() { }
+        })
+    </script>
+}

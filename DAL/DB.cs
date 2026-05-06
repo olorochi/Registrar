@@ -27,5 +27,12 @@ namespace DAL
 
         static public Repository<RenewPasswordCommand> RenewPasswordCommands { get; set; }
             = new Repository<RenewPasswordCommand>();
+
+        static public Repository<Student> Students { get; set; }
+            = new Repository<Student>();
+
+        static public Repository<Registration> Registrations { get; set; }
+            = new Repository<Registration>();
+
     }
 }

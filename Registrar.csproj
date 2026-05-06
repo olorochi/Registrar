@@ -112,6 +112,7 @@
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
+    <Compile Include="Controllers\SessionController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="DAL\AssetAttribute.cs" />
@@ -125,6 +126,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Allocations.cs" />
+    <Compile Include="Models\Session.cs" />
     <Compile Include="Models\Teachers.cs" />
     <Compile Include="Models\EmailView.cs" />
     <Compile Include="Models\Event.cs" />
@@ -212,9 +214,11 @@
     <Content Include="Views\Accounts\ManageUsers.cshtml" />
     <Content Include="Views\Accounts\GetUsers.cshtml" />
     <None Include="Properties\PublishProfiles\Wikimedia-2026 - Web Deploy.pubxml" />
-    <Content Include="Views\Students\List.cshtml" />
+    <Content Include="Views\Students\ListBak.cshtml" />
     <Content Include="Views\Teachers\List.cshtml" />
     <Content Include="Views\Courses\List.cshtml" />
+    <Content Include="Views\Students\GetListContent.cshtml" />
+    <Content Include="Views\Shared\List.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

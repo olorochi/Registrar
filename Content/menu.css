@@ -31,7 +31,15 @@
 .pageTitle {
     font-size: 1.5em;
     text-align: left;
+}
+
+.tabActive {
+    color: black;
     font-weight: bold;
+}
+
+.tabInactive {
+    color: lightgray;
 }
 
 .menu {

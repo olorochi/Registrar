@@ -1,0 +1,20 @@
+﻿<div id="ListPanel" class="ListLayout">
+    <!-- Periodicaly refreshed -->
+</div>
+
+@section Scripts {
+    <script>
+        let arp = null;
+
+        $(() => {
+            newSession(600);
+            arp = new AutoRefreshedPanel(
+                    "ListPanel",
+                    "GetListContent",
+                    5,
+                    postRefresh);
+
+            function postRefresh() { }
+        })
+    </script>
+}

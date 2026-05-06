@@ -1,0 +1,22 @@
+﻿@model IEnumerable <Models.Student>
+@{
+    var students = Model.GroupBy(s => s.GetYear()).OrderByDescending(g => g.Key);
+}
+
+@foreach(var group in students)
+{
+    <details id="student_details_@group.Key">
+        <summary >Cohorte @group.Key </summary>
+        @foreach (var student in group.OrderBy(s => s.FirstName).OrderBy(s => s.LastName))
+        {
+            <div class ="StudentListLayout">
+                <a href =" @Url.Action("Details" , new { id = student.Id }) ">
+                    <div style="display: flex">
+                        <span class ="studentCode"> @student.Code </span>
+                        <div class="serif"> @student.LastName @student.FirstName </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </details>
+}

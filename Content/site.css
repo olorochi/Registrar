@@ -124,3 +124,11 @@ summary {
 .highlight {
     background-color: yellow;
 }
+
+.studentCode {
+    color: blue;
+}
+
+.serif {
+    font-family: "Times New Roman", Georgia, serif;
+}

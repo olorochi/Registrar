@@ -8,10 +8,12 @@ namespace Models
     {
         // ordered to minimize padding
         public int Code;
-        public int Phone;
         public DateTime BirthDate;
+        public string Phone;
         public string FirstName;
         public string LastName;
         public string Email;
+
+        public int GetYear() => int.Parse(Code.ToString().Substring(0, 4));
     }
 }
