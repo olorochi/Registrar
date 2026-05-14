@@ -253,6 +253,7 @@
     <Content Include="Views\Accounts\ManageUsers.cshtml" />
     <Content Include="Views\Accounts\GetUsers.cshtml" />
     <None Include="Properties\PublishProfiles\Registrar20260514073340 - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\Registrar20260514100907 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\Wikimedia-2026 - Web Deploy.pubxml" />
     <Content Include="Views\Students\GetListContent.cshtml" />
     <Content Include="Views\Shared\List.cshtml" />
