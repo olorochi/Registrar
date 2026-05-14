@@ -1,10 +1,16 @@
-﻿<div id="ListPanel" class="ListLayout">
+﻿@{ 
+    var controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"];
+}
+
+
+<div id="ListPanel">
     <!-- Periodicaly refreshed -->
 </div>
 
 @section Scripts {
     <script>
         let arp = null;
+        let arpYears = null;
 
         $(() => {
             newSession(600);
@@ -14,7 +20,53 @@
                     5,
                     postRefresh);
 
-            function postRefresh() { }
+            arpYears = new AutoRefreshedPanel(
+                    "YearSelectPanel",
+                    "GetYearsList",
+                    -1,
+                    yearsPostRefresh);
+
+            function postRefresh() {
+                RestoreDetailsState()
+                arpYears.refresh()
+
+                const search = $("#searchInput").val();
+                $(".search").each(function () {
+                    $(this).html($(this).text().replace(new RegExp(`(${search})`, "gi"), `<span class="search-hl">$1</span>`));
+                });
+            }
+
+            let keywordsOnchangeTimer = null;
+            $("#searchInput").on('keyup', function () {
+                clearTimeout(keywordsOnchangeTimer);
+                /* delay request by 0.5 seconds */
+                keywordsOnchangeTimer = setTimeout(() => {
+                    window.location = "/@controller/SetSearchString?value=" + $("#searchInput").val();
+                }, 1000 /* 1 seconds */);
+            });
+            $("#searchInput").on('search', function () { /* click on clear */
+                clearTimeout(keywordsOnchangeTimer);
+                window.location = "/@controller/SetSearchString?value=" + $("#searchInput").val();
+            });
+            $("#searchInput").on("focus", function () {
+                arp.pause();
+            });
+            $("#searchInput").on("blur", function () {
+                arp.restart();
+            });
+
+            function yearsPostRefresh() {
+                $("#yearSelect").off();
+                $("#yearSelect").on("focus", function () {
+                    arp.pause();
+                });
+                $("#yearSelect").on("blur", function () {
+                    arp.restart();
+                });
+                $("#yearSelect").on('change', function () {
+                    window.location = "/Students/SetSearchYear?year=" + $("#yearSelect").val();
+                });
+            }
         })
     </script>
 }

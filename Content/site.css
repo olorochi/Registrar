@@ -22,13 +22,13 @@ form {
     margin: auto;
 }
 
-    form label {
-        font-weight: bold;
-    }
+form label {
+    font-weight: bold;
+}
 
-    form input {
-        margin-bottom: 8px;
-    }
+form input {
+    margin-bottom: 8px;
+}
 
 
 .detailsPanel dl {
@@ -125,10 +125,36 @@ summary {
     background-color: yellow;
 }
 
-.studentCode {
+.code {
     color: blue;
 }
 
 .serif {
     font-family: "Times New Roman", Georgia, serif;
+}
+
+.details-content {
+    padding-top: 15px;
+}
+
+.details-content p {
+    margin: 5px 0;
+    font-weight: 500;
+}
+
+.details-icon {
+    width: 16px;
+    text-align: center;
+}
+
+.gray {
+    color: gray;
+}
+
+.lightblue {
+    color: deepskyblue;
+}
+
+.search-hl {
+    background-color: yellow;
 }

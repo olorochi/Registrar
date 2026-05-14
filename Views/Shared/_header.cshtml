@@ -1,9 +1,10 @@
-﻿@using Registar.Controllers;
+﻿@using Registrar.Controllers;
 @{
-    string controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower();
-    string action = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString().ToLower();
+    var values = HttpContext.Current.Request.RequestContext.RouteData.Values;
+    string controller = values["controller"].ToString().ToLower();
+    string action = values["action"].ToString().ToLower();
 
-    var session = Session["session"] == null ? new Session() : (Session)Session["session"];
+    var session = Models.Session.Instance;
     var locals = session.GetLocals(controller);
 
     bool userConnected = Models.User.ConnectedUser != null;
@@ -11,20 +12,30 @@
     bool userCanWrite = userConnected ? Models.User.ConnectedUser.CanWrite : false;
     string index = RouteConfig.DefaultAction();
 
-    var tabs = new string[] { "Étudiants", "Cours", "Profs" };
-    var tabsControllers = new string[] { "students", "courses", "teachers" };
+    var tabs = new Dictionary<string, string>
+    {
+        { "students", "Étudiant" },
+        { "courses", "Cours" },
+        { "teachers", "Prof" }
+    };
 }
 
 <div class="section roundedBorder">
     <div class="headerMenu">
         <i class="siteIcon"></i>
         <div class="pageTitle">
-            @if (tabsControllers.Contains(controller))
+            @if (action == "list")
             {
-                for (int i = 0; i < tabs.Length; ++i)
+                foreach (var tab in tabs)
                 {
-                    <a href="/@tabsControllers[i]/List" class="@(tabsControllers[i] == controller ? "tabActive" : "tabInactive")"> @tabs[i] </a>
+                    <a href="/@tab.Key/List" class="@(tab.Key == controller ? "tabActive" : "tabInactive")">
+                        @(tab.Value + (tab.Value.EndsWith("s") ? "" : "s"))
+                    </a>
                 }
+            }
+            else
+            {
+                <div class="tabActive"> @(tabs.ContainsKey(controller) && action != "setnextsession" ? tabs[controller] + " - " : "") @ViewBag.Title </div>
             }
         </div>
         <!-- Direct action context command icons -->
@@ -104,29 +115,21 @@
                 break;
             case "details":
                 <div id="mainMenuPanel" class="menu">
-                    <div id="likesPanel">
-                        <!-- auto refreshed -->
-                    </div>
-                    @if (userCanWrite && (bool)ViewBag.IsOwner)
-                    {
                         <a href="/@controller/Edit" class="cmdIcon fa fa-pen-to-square" title="Modifier..."></a>
                         <i class="cmdIcon fa fa-trash-can"
                            title="Effacer"
                            onclick="bootbox.confirm(`<b style=color:red>Effacer ?</b>`, function(result){ if (result) window.location = '/@controller/Delete'; })">
                         </i>
-                    }
 
                     <a href="/@controller/List" class="cmdIcon fa fa-square-xmark" title="retour"></a>
                 </div>
                 break;
+            case "setnextsession":
             case "create":
-                if (userCanWrite)
-                {
-                    <div id="mainMenuPanel" class="menu">
-                        <i class="cmdIcon submitCmd fa fa-circle-check" title="Soumettre" onclick="document.getElementById('submit').click()"></i>
-                        <a href="@index" class="cmdIcon fa fa-square-xmark" title="Annuler"></a>
-                    </div>
-                }
+                <div id="mainMenuPanel" class="menu">
+                    <i class="cmdIcon submitCmd fa fa-circle-check" title="Soumettre" onclick="document.getElementById('submit').click()"></i>
+                    <a href="/@controller/List" class="cmdIcon fa fa-square-xmark" title="Annuler"></a>
+                </div>
                 break;
             case "edit":
                 <div id="mainMenuPanel" class="menu">
@@ -149,20 +152,11 @@
 @if (action == "list" && locals.Search)
 {
     <div class="searchBar">
-        <input type="search" id="searchInput" class="section roundedBorder searchBarItem" value="@locals.SearchString" placeholder="Recherche...">
-        <div id="categorySelectPanel" class="searchBarItem">
-            <!-- Dynamically refreshed -->
-            @{
-                //Html.RenderPartial("GetMediasCategoriesList");
-            }
-
-        </div>
-        <div id="ownerSelectPanel" class="searchBarItem">
-            <!-- Dynamically refreshed -->
-            @{
-                //Html.RenderPartial("GetMediasOwnersList");
-            }
-        </div>
+        <input type="search" id="searchInput" class="roundedBorder searchBarItem" value="@locals.SearchString" placeholder="Recherche...">
+        @if (controller == "students")
+        {
+            <div id="YearSelectPanel" class="searchBarItem"></div>
+        }
     </div>
 }
 

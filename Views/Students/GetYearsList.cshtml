@@ -1,0 +1,13 @@
+﻿@model IEnumerable<Student>
+@{
+    var groups = Model.GroupBy(s => s.GetYear()).OrderByDescending(g => g.Key);
+    int selected = Models.Session.Instance.Students.SearchYear;
+}
+
+<select id="yearSelect" class="form-control ellipsis">
+    <option value="0" selected>Toutes les années</option>
+    @foreach (var group in groups)
+    {
+        <option value="@group.Key" @(selected == group.Key ? "selected" : "")>@group.Key</option>
+    }
+</select>

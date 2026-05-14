@@ -1,0 +1,56 @@
+﻿@model Models.Course
+@{
+    var session = Models.Session.Instance;
+    var locals = session.Teachers;
+    Course course = Model ?? new Course();
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken() <!-- Injection de jeton anti contrefaçon de formulaire -->
+
+    <details id="course_form_info_details">
+        <summary> Informations @(Model == null ? "" : "- [" + course.Code + "]")</summary>
+
+        <label for="Session">Session</label>
+        <input id="Session"
+               name="Session"
+               class="form-control"
+               placeholder="Session"
+               value="@course.Session"
+               type="number"
+               min="1"
+               max="6"
+               required
+               RequireMessage="Veuillez entrer la session" />
+
+        <label for="Code">Sigle</label>
+        <input id="Code"
+               name="Code"
+               class="form-control"
+               placeholder="Sigle"
+               value="@course.Code"
+               required
+               RequireMessage="Veuillez entrer le sigle" />
+
+        <label for="Title">Titre</label>
+        <input id="Title"
+               name="Title"
+               class="form-control"
+               placeholder="Titre"
+               value="@course.Title"
+               required
+               RequireMessage="Veuillez entrer le titre" />
+    </details>
+
+    if ("create" != HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString().ToLower())
+    {
+        <details style="margin-top: 25px;" id="course_form_selection_details">
+            <summary> Inscriptions: Session @session.NextSession.ShortCaption </summary>
+            @Helper.SelectionLists("selection", course.StudentsSelectList, Models.SelectListUtilities<Student>.Convert(DAL.DB.Students.ToList(), "Caption"))
+        </details>
+    }
+
+    <input id="submit" type="submit" value="Enregistrer" class="btn btn-primary" style="display:none">
+}
+

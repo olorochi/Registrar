@@ -110,12 +110,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccessControl.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
+    <Compile Include="Controllers\ScholarController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\NotificationsController.cs" />
-    <Compile Include="Controllers\SessionController.cs" />
+    <Compile Include="Controllers\CrudController.cs" />
     <Compile Include="Controllers\StudentsController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="DAL\AssetAttribute.cs" />
+    <Compile Include="Models\CourseRepository.cs" />
     <Compile Include="DAL\DB.cs" />
     <Compile Include="DAL\ImageAsset.cs" />
     <Compile Include="DAL\Record.cs" />
@@ -126,8 +128,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Allocations.cs" />
+    <Compile Include="Models\Assoc.cs" />
+    <Compile Include="Models\NextSession.cs" />
+    <Compile Include="Models\Scholar.cs" />
+    <Compile Include="Models\SelectListUtilities.cs" />
     <Compile Include="Models\Session.cs" />
-    <Compile Include="Models\Teachers.cs" />
+    <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\EmailView.cs" />
     <Compile Include="Models\Event.cs" />
     <Compile Include="Models\EventsRepository.cs" />
@@ -151,7 +157,6 @@
     <Content Include="Content\Icons.css" />
     <Content Include="Content\image-control.css" />
     <Content Include="Content\jqui-custom-datepicker.css" />
-    <Content Include="Content\media.css" />
     <Content Include="Content\menu.css" />
     <Content Include="Content\popup.css" />
     <Content Include="Content\Selections.css" />
@@ -196,7 +201,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="WebApp.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\CourseAssoc\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\Helper.cshtml" />
     <None Include="packages.config" />
@@ -214,11 +221,24 @@
     <Content Include="Views\Accounts\ManageUsers.cshtml" />
     <Content Include="Views\Accounts\GetUsers.cshtml" />
     <None Include="Properties\PublishProfiles\Wikimedia-2026 - Web Deploy.pubxml" />
-    <Content Include="Views\Students\ListBak.cshtml" />
-    <Content Include="Views\Teachers\List.cshtml" />
-    <Content Include="Views\Courses\List.cshtml" />
     <Content Include="Views\Students\GetListContent.cshtml" />
     <Content Include="Views\Shared\List.cshtml" />
+    <Content Include="Views\Teachers\GetListContent.cshtml" />
+    <Content Include="Views\Courses\GetListContent.cshtml" />
+    <Content Include="Views\Shared\Details.cshtml" />
+    <Content Include="Views\Students\GetDetailsInfoPanel.cshtml" />
+    <Content Include="Views\Students\Form.cshtml" />
+    <Content Include="Views\Shared\Edit.cshtml" />
+    <Content Include="Views\Shared\Create.cshtml" />
+    <Content Include="Views\Students\GetDetailsSelectPanel.cshtml" />
+    <Content Include="Views\Teachers\Form.cshtml" />
+    <Content Include="Views\Courses\Form.cshtml" />
+    <Content Include="Views\Courses\GetDetailsSelectPanel.cshtml" />
+    <Content Include="Views\Courses\GetDetailsInfoPanel.cshtml" />
+    <Content Include="Views\Teachers\GetDetailsInfoPanel.cshtml" />
+    <Content Include="Views\Teachers\GetDetailsSelectPanel.cshtml" />
+    <Content Include="Views\Shared\SetNextSession.cshtml" />
+    <Content Include="Views\Students\GetYearsList.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

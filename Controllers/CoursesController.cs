@@ -1,90 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using Models;
+using DAL;
 using System.Web.Mvc;
 using static Controllers.AccessControl;
 
-namespace Registar.Controllers
+namespace Registrar.Controllers
 {
-    public class CoursesController : Controller
+    public class CoursesController : CrudController<Course, Registration>
     {
-        [UserAccess(Models.Access.View)]
-        public ActionResult List()
+        public override Repository<Course> Repository => DB.Courses;
+        public override Repository<Registration> SelectionRepository => DB.Registrations;
+        public override int GetIdFromSelection(Registration registration) => registration.CourseId;
+        public override SessionLocals GetLocals() => SessionState.Courses;
+        public override Registration ConstructSelItem(int course, int student, int year) =>
+            new Registration { CourseId=course, StudentId=student, Year=year };
+
+        static bool Validate(Course course) => course.Session >= 1 && course.Session <= 6 && !DB.Courses.ToList().Exists(c => c.Code == course.Code && c.Id != course.Id);
+        public override bool ValidateCreate(Course course) => Validate(course);
+        public override bool ValidateEdit(Course old, Course course) => Validate(course);
+
+        [UserAccess(Access.Write)]
+        public ActionResult Delete()
         {
-            return View();
-        }
+            int id = SessionState.Courses.CurrentId;
+            Course course = DB.Courses.Get(id);
+            foreach (Registration r in course.Registrations)
+                DB.Registrations.Delete(r.Id);
+            foreach (Allocation a in course.Allocations)
+                DB.Allocations.Delete(a.Id);
 
-        [UserAccess(Models.Access.View)]
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        [UserAccess(Models.Access.Write)]
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [UserAccess(Models.Access.Write)]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        [UserAccess(Models.Access.Write)]
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [UserAccess(Models.Access.Write)]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        [UserAccess(Models.Access.Write)]
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [UserAccess(Models.Access.Write)]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            Repository.Delete(id);
+            return RedirectToLocalAction("list");
         }
     }
 }

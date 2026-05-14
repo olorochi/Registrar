@@ -1,0 +1,26 @@
+﻿@model IEnumerable <Models.Course>
+@{
+    
+    var sessions = Model.Where(c => c.Caption.ToLower().Contains(Models.Session.Instance.Courses.SearchString))
+        .OrderBy(c => c.Code) // A code is unique so a single OrderBy is sufficient prior to grouping (Caption is also unnecessary)
+        .GroupBy(c => c.Session)
+        .OrderBy(s => s.Key);
+}
+
+@foreach(var session in sessions)
+{
+    <details id="course_details_@session.Key">
+        <summary >Session @session.Key </summary>
+        @foreach (var course in session)
+        {
+            <div>
+                <a href =" @Url.Action("Details" , new { id = course.Id }) ">
+                    <div style="display: flex">
+                        <span class="code search"> @course.Code </span>
+                        <div class="serif search"> @course.Title </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </details>
+}

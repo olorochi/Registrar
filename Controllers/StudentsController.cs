@@ -1,129 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Models;
+﻿using Models;
 using DAL;
-using static Controllers.AccessControl;
+using System.Web.Mvc;
+using Controllers;
 
 namespace Registrar.Controllers
 {
-    public class StudentsController : SessionController
+    public class StudentsController : ScholarController<Student, Registration>
     {
-        const string IllegalAccessUrl = "/Accounts/Login?message=Tentative d'accès illégal!&success=false";
+        public override Repository<Student> Repository => DB.Students;
+        public override Repository<Registration> SelectionRepository => DB.Registrations;
+        public override SessionLocals GetLocals() => SessionState.Students;
 
-        [UserAccess(Access.View)]
-        public ActionResult List()
-        {
-            return View();
-        }
-
-        public ActionResult ToggleSearch()
-        {
-            var session = GetSession();
-            session.Students.Search = !session.Students.Search;
-            CommitSession(session);
-            return RedirectToAction("List");
-        }
-
-        [UserAccess(Access.View)]
-        public ActionResult GetListContent(bool forceRefresh = false)
+        public ActionResult GetYearsList(bool forceRefresh = false)
         {
             try
             {
-                IEnumerable<Student> result = null;
-
-                if (DB.Students.HasChanged || forceRefresh)
-                {
-                    var session = GetSession().Students;
-                    IEnumerable<Student> students = DB.Students.ToList();
-                    if (session.Search)
-                        students = students.Where(s =>
-                            s.FirstName.ToLower().Contains(session.SearchString)
-                            || s.LastName.ToLower().Contains(session.SearchString)
-                        );
-
-                    return PartialView(students);
-                }
+                if (SessionState.Students.Search)
+                    return PartialView(Repository.ToList());
 
                 return null;
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 return Content("Erreur interne" + ex.Message, "text/html");
             }
         }
 
-        [UserAccess(Access.View)]
-        public ActionResult Details(int id)
+        public ActionResult SetSearchYear(int year)
         {
-            return View();
-        }
-
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [UserAccess(Access.Write)]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        [UserAccess(Access.Write)]
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [UserAccess(Access.Write)]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        [UserAccess(Access.Write)]
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [UserAccess(Access.Write)]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            SessionState.Students.SearchYear = year;
+            return RedirectToAction("List");
         }
     }
 }

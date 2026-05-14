@@ -1,0 +1,43 @@
+﻿@model IEnumerable<Models.Registration>
+@{
+    var years = Model.OrderBy(r => r.Student.Caption).GroupBy(r => r.Student.GetYear()).OrderByDescending(y => y.Key);
+}
+
+<h4>Étudiants inscrits</h4>
+@if (Model.Count() > 0)
+{
+    var course = Model.First().Course;
+    foreach (var year in years)
+    {
+        var allocation = DAL.DB.Allocations.ToList().Find(a => a.Year == year.Key && a.CourseId == course.Id);
+        <details id="course_select_details">
+            <summary>
+                @year.Key -
+                @if (allocation == null)
+                {
+                    <span>Poste Vacant</span>
+                }
+                else
+                {
+                    <a class="lightblue" href="/teachers/details/@allocation.Teacher.Id">@allocation.Teacher.FullName</a>
+                }
+            </summary>
+            @foreach (var registration in year)
+            {
+                var student = registration.Student;
+                <div>
+                    <a href="@Url.Action("Details" , new { id = student.Id })">
+                        <div style="display: flex">
+                            <span class ="code"> @student.Code </span>
+                            <div class="serif"> @student.FullName </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </details>
+    }
+}
+else
+{
+    <p class="gray">Aucunes inscriptions pour le moment.</p>
+}

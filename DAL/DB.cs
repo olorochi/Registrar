@@ -1,5 +1,6 @@
 ﻿using EmailHandling;
 using Models;
+using System.Net;
 
 namespace DAL
 {
@@ -31,8 +32,16 @@ namespace DAL
         static public Repository<Student> Students { get; set; }
             = new Repository<Student>();
 
+        static public CourseRepository Courses { get; set; }
+            = new CourseRepository();
+
+        static public Repository<Teacher> Teachers { get; set; }
+            = new Repository<Teacher>();
+
         static public Repository<Registration> Registrations { get; set; }
             = new Repository<Registration>();
 
+        static public Repository<Allocation> Allocations { get; set; }
+            = new Repository<Allocation>();
     }
 }

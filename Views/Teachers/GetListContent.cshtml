@@ -1,0 +1,18 @@
+﻿@model IEnumerable <Models.Teacher>
+@{
+    var teachers = Model.Where(t => t.Caption.ToLower().Contains(Models.Session.Instance.Teachers.SearchString))
+        .OrderBy(t => t.FullName);
+}
+
+@foreach (var teacher in teachers)
+{
+    <div>
+        <a href="@Url.Action("Details" , new { id = teacher.Id }) ">
+            <div style="display: flex; align-items: center;">
+                <div class="UserSmallAvatar" style="background:url(@teacher.Avatar); margin: 3px;"></div>
+                <span class="code search" style="margin: 3px;"> @teacher.Code </span>
+                <div class="serif search" style="margin: 3px;"> @teacher.FullName </div>
+            </div>
+        </a>
+    </div>
+}

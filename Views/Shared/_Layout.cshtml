@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{ 
+    var controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower();
+}
+
+   
+<!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -26,11 +31,18 @@
         </div>
 
         <div id="footerPanel" class="section footerPanel roundedBorder">
-            <b>Session courante : </b>
-            <img src="/updatingView.gif" 
-                 style="width:24px; display:none" 
+            @if (new string[] { "students", "courses", "teachers" }.Contains(controller))
+            {
+                <a href="/@controller/SetNextSession"><b>@Models.Session.Instance.NextSession.Caption</b></a>
+            }
+            else
+            {
+                <b> &copy; @DateTime.Now.Year - Registrar </b>
+            }
+            <img src="/updatingView.gif"
+                 style="width:24px; display:none"
                  id="updatingView"
-                 title="Rafraichissement de la vue"/>
+                 title="Rafraichissement de la vue" />
         </div>
 
     </div>

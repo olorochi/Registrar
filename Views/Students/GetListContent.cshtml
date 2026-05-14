@@ -1,19 +1,24 @@
 ﻿@model IEnumerable <Models.Student>
 @{
-    var students = Model.GroupBy(s => s.GetYear()).OrderByDescending(g => g.Key);
+    var session = Models.Session.Instance.Students;
+    var groups = Model.Where(s => s.Caption.ToLower().Contains(session.SearchString))
+        .OrderBy(s => s.FullName)
+        .GroupBy(s => s.GetYear())
+        .Where(g => session.SearchYear == 0 || session.SearchYear == g.Key)
+        .OrderByDescending(g => g.Key);
 }
 
-@foreach(var group in students)
+@foreach(var group in groups)
 {
     <details id="student_details_@group.Key">
         <summary >Cohorte @group.Key </summary>
-        @foreach (var student in group.OrderBy(s => s.FirstName).OrderBy(s => s.LastName))
+        @foreach (var student in group)
         {
-            <div class ="StudentListLayout">
+            <div>
                 <a href =" @Url.Action("Details" , new { id = student.Id }) ">
                     <div style="display: flex">
-                        <span class ="studentCode"> @student.Code </span>
-                        <div class="serif"> @student.LastName @student.FirstName </div>
+                        <span class="code search"> @student.Code </span>
+                        <div class="serif search"> @student.FullName </div>
                     </div>
                 </a>
             </div>

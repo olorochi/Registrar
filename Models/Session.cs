@@ -1,32 +1,47 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Web;
 
 namespace Models
 {
-    public enum Season
-    {
-        Automne,
-        Hiver
-    }
 
-    public class ControllerLocals
+    public class SessionLocals
     {
         public string SearchString = "";
         public int CurrentId = 0;
         public bool Search = false;
     }
 
+    public class ScholarSessionLocals : SessionLocals
+    {
+        public int CurrentCode = 0;
+    }
+
+    public class StudentSessionLocals : ScholarSessionLocals
+    {
+        public int SearchYear = 0;
+    }
+
     public class Session
     {
-        public ControllerLocals Students = new ControllerLocals();
-        public ControllerLocals Teachers = new ControllerLocals();
-        public ControllerLocals Courses = new ControllerLocals();
-        public int AllocationYear = DateTime.Now.Year;
-        public Season AllocationSeason = Season.Automne;
+        public static Session Instance
+        {
+            get
+            {
+                var session = HttpContext.Current.Session;
+                if (session["session"] == null)
+                    session["session"] = new Session();
+                return (Session)session["session"];
+            }
+            set => HttpContext.Current.Session["session"] = value;
+        }
 
-        public ControllerLocals GetLocals(string controller)
+        public StudentSessionLocals Students = new StudentSessionLocals();
+        public ScholarSessionLocals Teachers = new ScholarSessionLocals();
+        public SessionLocals Courses = new SessionLocals();
+        public NextSession NextSession = new NextSession();
+
+        private Session() { }
+
+        public SessionLocals GetLocals(string controller)
         {
             switch(controller)
             {

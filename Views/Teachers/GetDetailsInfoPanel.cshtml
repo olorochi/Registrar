@@ -1,0 +1,17 @@
+﻿@model Teacher
+
+<details class="details-panel" id="teacher_info_details">
+    <summary class="details-summary"> 
+        <i class="fa fa-graduation-cap details-summary-icon"></i> @Model.FirstName @Model.LastName 
+    </summary>
+    <div class="details-content">
+        <p><i class="fa fa-barcode details-icon"></i> @Model.Code</p>
+        <p><i class="fa fa-phone details-icon"></i> @Model.Phone</p>
+        <p><i class="fa fa-paper-plane details-icon"></i> @Model.Email</p>
+        <br />
+        <p>Embauché le @Model.StartDate.ToString("dd MMMM yyy") </p>
+        <p>@(string.Format("{0:F1} ans d'ancienneté", (DateTime.Now - Model.StartDate).TotalDays / 365.25)) </p>
+        <br />
+        <div class="UserSmallAvatar" style="background:url(@Model.Avatar); margin: 3px;"></div>
+    </div>
+</details>

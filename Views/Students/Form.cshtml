@@ -1,0 +1,85 @@
+﻿@model Models.Student
+@{
+    var session = Models.Session.Instance;
+    var locals = session.Students;
+    Student student;
+    if (Model == null) // create
+    {
+        student = new Student();
+        student.Code = locals.CurrentCode.ToString();
+        student.BirthDate = DateTime.Now;
+    }
+    else // edit
+    {
+        student = Model;
+        student.Code = DAL.DB.Students.Get(locals.CurrentId).Code;
+    }
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken() <!-- Injection de jeton anti contrefaçon de formulaire -->
+
+    <details id="student_form_info_details">
+        <summary> Informations - [@student.Code]</summary>
+
+        <label for="FirstName">Prénom</label>
+        <input id="FirstName"
+               name="FirstName"
+               class="form-control"
+               placeholder="Prénom"
+               value="@student.FirstName"
+               required
+               RequireMessage="Veuillez entrer votre prénom" />
+
+        <label for="LastName">Nom</label>
+        <input id="LastName"
+               name="LastName"
+               class="form-control"
+               placeholder="Nom"
+               value="@student.LastName"
+               required
+               RequireMessage="Veuillez entrer votre nom" />
+
+        <label for="BirthDate">Date de naissance</label>
+        <input id="BirthDate"
+               name="BirthDate"
+               class="form-control"
+               placeholder="Date de naissance"
+               value="@(student.BirthDate.ToString("yyyy-MM-dd"))"
+               required
+               type="date"
+               RequireMessage="Veuillez entrer votre date de naissance" />
+
+        <label for="Email">Courriel</label>
+        <input id="Email"
+               name="Email"
+               class="form-control"
+               placeholder="Courriel"
+               value="@student.Email"
+               required
+               type="email"
+               RequireMessage="Veuillez entrer votre email" />
+
+        <label for="Phone">Téléphone</label>
+        <input id="Phone"
+               name="Phone"
+               class="form-control"
+               placeholder="Numéro de téléphone"
+               value="@student.Phone"
+               required
+               type="tel"
+               RequireMessage="Veuillez entrer votre numéro de téléphone" />
+    </details>
+
+    if ("create" != HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString().ToLower())
+    {
+        <details style="margin-top: 25px;" id="student_form_select_details">
+            <summary> Inscriptions: Session @session.NextSession.ShortCaption </summary>
+            @Helper.SelectionLists("selection", student.NextSessionCoursesToSelectList, DAL.DB.Courses.NextSessionSelectList())
+        </details>
+    }
+
+    <input id="submit" type="submit" value="Enregistrer" class="btn btn-primary" style="display:none">
+}
+

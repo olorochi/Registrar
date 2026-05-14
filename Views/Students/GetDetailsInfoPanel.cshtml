@@ -1,0 +1,13 @@
+﻿@model Student
+
+<details class="details-panel" id="student_info_details">
+    <summary class="details-summary"> 
+        <i class="fa fa-graduation-cap details-summary-icon"></i> @Model.FirstName @Model.LastName 
+    </summary>
+    <div class="details-content">
+        <p><i class="fa fa-barcode details-icon"></i> @Model.Code</p>
+        <p><i class="fa fa-phone details-icon"></i> @Model.Phone</p>
+        <p><i class="fa fa-paper-plane details-icon"></i> @Model.Email</p>
+        <p><i class="fa fa-birthday-cake details-icon"></i> @Model.BirthDate.ToString("dd MMMM yyy") </p>
+    </div>
+</details>

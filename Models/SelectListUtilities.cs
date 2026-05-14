@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace Models
@@ -7,7 +8,7 @@ namespace Models
     {
         public static SelectList Convert(IEnumerable<T> collection, string targetField = "Name", string defaultText = "")
         {
-            List<SelectListItem> items = new List<SelectListItem>();
+            List<SelectListItem> items = new List<SelectListItem>(collection.Count());
             if (typeof(T).Name == "String")
             {
                 int index = 0;

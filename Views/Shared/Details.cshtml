@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Détails";
+    string controller = HttpContext.Current.Request.RequestContext.RouteData.Values["controller"].ToString().ToLower();
+}
+
+<div id="DetailsInfoPanel"></div>
+<hr/>
+<div id="DetailsSelectPanel"></div>
+
+@section Scripts {
+    <script>
+        let arp1 = null;
+        let arp2 = null;
+
+        $(() => {
+            newSession(600);
+            arp1 = new AutoRefreshedPanel(
+                    "DetailsInfoPanel",
+                    "/@controller/GetDetailsInfoPanel",
+                    5,
+                    RestoreDetailsState);
+            arp2 = new AutoRefreshedPanel(
+                    "DetailsSelectPanel",
+                    "/@controller/GetDetailsSelectPanel",
+                    5,
+                    RestoreDetailsState);
+        })
+    </script>
+}

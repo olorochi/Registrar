@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Session courrante";
+    var nextSession = Models.Session.Instance.NextSession;
+    bool isFall = nextSession.Season == Season.Automne;
+}
+<form action="SetNextSession" method="post">
+    <div style="color:dodgerblue;font-size:1.0em;">Choisissez l'année et la session pour les prochaines allocations de cours : </div>
+    <hr/>
+    <label for="year">Année</label>
+    <input type="number" min="1990"
+           max="@DateTime.Now.Year"
+           value="@nextSession.Year"
+           class="form-control"
+           name="year" id="year" />
+
+    <fieldset>
+        <legend>Session</legend>
+
+        <div style="display:grid; grid-template-columns:20px auto; align-items:last baseline">
+            <input type="radio" name="Season" value="Automne" id="session_automne" @(isFall ? "checked" : "") />
+            <label for="session_automne">Automne</label>
+            <input type="radio" name="Season" value="Hiver" id="session_hiver" @(!isFall ? "checked" : "") />
+            <label for="session_hiver">Hiver</label>
+        </div>
+    </fieldset>
+</form>

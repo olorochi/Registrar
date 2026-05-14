@@ -1,19 +1,20 @@
 ﻿using DAL;
-using Newtonsoft.Json;
 using System;
 
 namespace Models
 {
-    public class Student : Record
+    public class Student : Scholar<Registration>
     {
-        // ordered to minimize padding
-        public int Code;
-        public DateTime BirthDate;
-        public string Phone;
-        public string FirstName;
-        public string LastName;
-        public string Email;
+        public override Repository<Registration> SelectionRepository => DB.Registrations;
+
+        public DateTime BirthDate { get; set; }
 
         public int GetYear() => int.Parse(Code.ToString().Substring(0, 4));
+
+        public override int TryGenerateCode()
+        {
+            int sep = (int)Math.Pow(10, 5); // document says 6 but pre-inserted data uses 5
+            return DateTime.Now.Year * sep + rand.Next() % sep;
+        }
     }
 }

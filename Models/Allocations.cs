@@ -1,13 +1,11 @@
 ﻿using DAL;
 using Newtonsoft.Json;
-using System;
 
 namespace Models
 {
-    public class Allocation : Record
+    public class Allocation : Assoc
     {
-        public int TeacherId;
-        public int CourseId;
-        public int Year;
+        public int TeacherId { get => ScholarId; set => ScholarId = value; }
+        [JsonIgnore] public Teacher Teacher => DB.Teachers.Get(TeacherId);
     }
 }

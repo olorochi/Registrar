@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Models.Allocation>
+@{
+    var years = Model.OrderBy(r => r.Course.Caption).GroupBy(r => r.Year).OrderByDescending(y => y.Key);
+}
+
+<h4>Allocations</h4>
+@if (Model.Count() > 0)
+{
+    foreach (var year in years)
+    {
+        <details id="teacher_select_details">
+            <summary>@year.Key</summary>
+            @foreach (var allocation in year)
+            {
+                var course = allocation.Course;
+                <div>
+                    <a href="/courses/details/@course.Id">
+                        <div style="display: flex">
+                            <span class="gray"> [@course.Session] </span>
+                            <div class="code"> @course.Code </div>
+                            <div class="serif"> @course.Title </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </details>
+    }
+}
+else
+{
+    <p class="gray">Aucunes allocations pour le moment.</p>
+}
